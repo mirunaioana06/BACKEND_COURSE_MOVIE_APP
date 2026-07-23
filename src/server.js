@@ -5,6 +5,7 @@ import movieRoutes from './routes/movieRoutes.js';
 import { connectDB, disconnectDB } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import watchlistRoutes from './routes/watchlistRoutes.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 config();
 
@@ -18,6 +19,9 @@ await connectDB();
 app.use('/movies', movieRoutes);
 app.use('/auth', authRoutes);
 app.use('/watchlist', watchlistRoutes);
+
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = 5001;
 
