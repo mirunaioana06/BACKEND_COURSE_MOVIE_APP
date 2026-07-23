@@ -7,10 +7,14 @@ import {
   removeFromWatchlist,
 } from '../controllers/watchlistController.js';
 
+import { validateRequest } from '../middleware/validateRequest.js';
+import { addToWatchlistSchema } from '../validators/watchlistValidators.js';
+
 const router = express.Router();
 router.use(authMiddleware);
 
-router.post('/', addToWatchlist);
+router.post('/', validateRequest(addToWatchlistSchema), addToWatchlist);
+
 router.put('/:id', updateWatchlistItem);
 router.delete('/:id', removeFromWatchlist);
 
