@@ -11,13 +11,6 @@ const addToWatchlistSchema = z.object({
     })
     .optional(),
 
-  rating: z.coerce
-    .number()
-    .int('Rating must be an integer')
-    .min(1, 'Rating must be between 1 and 10')
-    .max(10, 'Rating must be between 1 and 10')
-    .optional(),
-
   notes: z.string().optional(),
 });
 

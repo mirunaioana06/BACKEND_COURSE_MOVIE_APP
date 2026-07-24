@@ -1,7 +1,7 @@
 import { prisma } from '../config/db.js';
 
 const addToWatchlist = async (req, res) => {
-  const { movieId, status, rating, notes } = req.body;
+  const { movieId, status, notes } = req.body;
 
   const movie = await prisma.movie.findUnique({
     where: {
@@ -35,7 +35,6 @@ const addToWatchlist = async (req, res) => {
       userId: req.user.id,
       movieId: movieId,
       status: status || 'PLANNED',
-      rating: rating,
       notes: notes,
     },
   });
@@ -49,7 +48,7 @@ const addToWatchlist = async (req, res) => {
 };
 
 const updateWatchlistItem = async (req, res) => {
-  const { status, rating, notes } = req.body;
+  const { status, notes } = req.body;
 
   const watchlistItem = await prisma.watchlistItem.findUnique({
     where: {
@@ -73,10 +72,6 @@ const updateWatchlistItem = async (req, res) => {
 
   if (status !== undefined) {
     updateData.status = status.toUpperCase();
-  }
-
-  if (rating !== undefined) {
-    updateData.rating = rating;
   }
 
   if (notes !== undefined) {

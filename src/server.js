@@ -7,6 +7,8 @@ import authRoutes from './routes/authRoutes.js';
 import watchlistRoutes from './routes/watchlistRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
+import reviewRoutes from './routes/reviewRoutes.js';
+
 config();
 
 const app = express();
@@ -19,6 +21,7 @@ await connectDB();
 app.use('/movies', movieRoutes);
 app.use('/auth', authRoutes);
 app.use('/watchlist', watchlistRoutes);
+app.use('/reviews', reviewRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
