@@ -1,5 +1,6 @@
+import 'dotenv/config';
+import passport from './config/passport.js';
 import express from 'express';
-import { config } from 'dotenv';
 
 import movieRoutes from './routes/movieRoutes.js';
 import { connectDB, disconnectDB } from './config/db.js';
@@ -9,12 +10,11 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import reviewRoutes from './routes/reviewRoutes.js';
 
-config();
-
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
 
 await connectDB();
 

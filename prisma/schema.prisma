@@ -17,7 +17,8 @@ model User{
   id String @id @default(uuid())
   name String
   email String @unique
-  password String
+  password String? 
+  google String? @unique
   createdAt DateTime @default(now())
 
   movies Movie[] @relation("MovieCreator")
