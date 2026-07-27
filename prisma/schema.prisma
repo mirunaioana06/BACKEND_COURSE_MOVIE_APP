@@ -35,6 +35,7 @@ releaseYear Int
 genres String[] @default([])
 runtime Int?
 posterUrl String?
+videoKey String?
 createdBy String
 createdAt DateTime @default(now())
 

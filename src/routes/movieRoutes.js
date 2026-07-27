@@ -2,7 +2,10 @@ import express from 'express';
 import { authMiddleware } from '../middleware/authMiddleware.js';
 import { validateRequest } from '../middleware/validateRequest.js';
 import { reviewSchema } from '../validators/reviewValidators.js';
+import { requireMovieOwner } from '../middleware/movieOwnerMiddleware.js';
+import { uploadVideo } from '../middleware/videoUpload.js';
 
+import { uploadMovieVideo, getMovieVideoUrl } from '../controllers/movieVideoController.js';
 import {
   createReview,
   updateReview,
@@ -11,6 +14,16 @@ import {
 } from '../controllers/reviewController.js';
 
 const router = express.Router();
+
+router.post(
+  '/:movieId/video',
+  authMiddleware,
+  requireMovieOwner,
+  uploadVideo.single('video'),
+  uploadMovieVideo,
+);
+
+router.get('/:movieId/video-url', authMiddleware, getMovieVideoUrl);
 
 router.get('/:movieId/rating', authMiddleware, getMovieRating);
 
