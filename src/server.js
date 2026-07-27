@@ -1,3 +1,4 @@
+import { globalLimiter } from './middleware/rateMiddleware.js';
 import 'dotenv/config';
 import passport from './config/passport.js';
 import express from 'express';
@@ -11,6 +12,8 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 
 const app = express();
+app.disable('x-powered-by');
+app.use(globalLimiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

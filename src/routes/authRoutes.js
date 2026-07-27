@@ -1,4 +1,5 @@
 import express from 'express';
+import { loginLimiter, loginSlowDown, registerLimiter } from '../middleware/rateMiddleware.js';
 import { register, login, logout } from '../controllers/authController.js';
 import { validateRequest } from '../middleware/validateRequest.js';
 import { registerSchema, loginSchema } from '../validators/authValidators.js';
@@ -7,8 +8,8 @@ import { generateToken } from '../utils/generateToken.js';
 
 const router = express.Router();
 
-router.post('/register', validateRequest(registerSchema), register);
-router.post('/login', validateRequest(loginSchema), login);
+router.post('/register', registerLimiter, validateRequest(registerSchema), register);
+router.post('/login', loginLimiter, loginSlowDown, validateRequest(loginSchema), login);
 router.post('/logout', logout);
 
 router.get(
