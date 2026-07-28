@@ -10,6 +10,7 @@ import watchlistRoutes from './routes/watchlistRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import reviewRoutes from './routes/reviewRoutes.js';
+import { startDatabaseStatsJob } from './jobs/databaseStatsJob.js';
 
 const app = express();
 app.disable('x-powered-by');
@@ -21,6 +22,7 @@ app.use(passport.initialize());
 
 await connectDB();
 
+startDatabaseStatsJob();
 app.use('/movies', movieRoutes);
 app.use('/auth', authRoutes);
 app.use('/watchlist', watchlistRoutes);

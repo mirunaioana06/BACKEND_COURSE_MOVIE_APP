@@ -1,6 +1,7 @@
 import { prisma } from '../config/db.js';
 
 import { createVideoViewUrl, deleteVideoObject } from '../services/s3Service.js';
+import { addVideoDeletionJob } from '../queues/taskQueue.js';
 
 const uploadMovieVideo = async (req, res, next) => {
   if (!req.file) {
@@ -30,12 +31,18 @@ const uploadMovieVideo = async (req, res, next) => {
 
     if (oldVideoKey) {
       try {
-        await deleteVideoObject(oldVideoKey);
-      } catch (cleanupError) {
-        console.error('Failed to delete the old movie video:', {
+        const cleanupJob = await addVideoDeletionJob(oldVideoKey);
+
+        console.log('[QUEUE] Video cleanup job added:', {
+          jobId: cleanupJob.id,
           movieId: req.movie.id,
           videoKey: oldVideoKey,
-          message: cleanupError.message,
+        });
+      } catch (queueError) {
+        console.error('Failed to queue the old movie video deletion:', {
+          movieId: req.movie.id,
+          videoKey: oldVideoKey,
+          message: queueError.message,
         });
       }
     }
