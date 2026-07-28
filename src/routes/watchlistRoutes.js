@@ -1,5 +1,6 @@
 import express from 'express';
 import { authMiddleware } from '../middleware/authMiddleware.js';
+import { watchlistLimiter } from '../middleware/rateMiddleware.js';
 
 import {
   addToWatchlist,
@@ -12,6 +13,7 @@ import { addToWatchlistSchema } from '../validators/watchlistValidators.js';
 
 const router = express.Router();
 router.use(authMiddleware);
+router.use(watchlistLimiter);
 
 router.post('/', validateRequest(addToWatchlistSchema), addToWatchlist);
 

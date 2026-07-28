@@ -1,3 +1,4 @@
+import { globalLimiter } from './middleware/rateMiddleware.js';
 import 'dotenv/config';
 import passport from './config/passport.js';
 import express from 'express';
@@ -9,8 +10,11 @@ import watchlistRoutes from './routes/watchlistRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import reviewRoutes from './routes/reviewRoutes.js';
+import { startDatabaseStatsJob } from './jobs/databaseStatsJob.js';
 
 const app = express();
+app.disable('x-powered-by');
+app.use(globalLimiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,6 +22,7 @@ app.use(passport.initialize());
 
 await connectDB();
 
+startDatabaseStatsJob();
 app.use('/movies', movieRoutes);
 app.use('/auth', authRoutes);
 app.use('/watchlist', watchlistRoutes);
